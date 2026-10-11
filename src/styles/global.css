@@ -1,0 +1,63 @@
+:root {
+  --cor-fundo: #f6f4ef;
+  --cor-texto: #2b2b2b;
+  --cor-primaria: #7a4b2a;
+  --cor-primaria-escura: #5c3820;
+  --cor-borda: #ddd6c8;
+  --cor-sucesso: #1f7a3d;
+  --cor-erro: #b3261e;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+#root { display: flex; flex-direction: column; min-height: 100vh; }
+
+.container { width: 100%; max-width: 960px; margin: 0 auto; padding: 0 1rem; }
+.conteudo { flex: 1; padding-top: 2rem; padding-bottom: 2rem; }
+
+.cabecalho { background: var(--cor-primaria); color: #fff; }
+.cabecalho-conteudo {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 0.5rem; padding-top: 0.9rem; padding-bottom: 0.9rem;
+}
+.logo { color: #fff; font-size: 1.4rem; font-weight: 700; text-decoration: none; }
+.menu { display: flex; gap: 1rem; }
+.menu a { color: #fff; text-decoration: none; padding: 0.25rem 0; border-bottom: 2px solid transparent; }
+.menu a.active, .menu a:hover { border-bottom-color: #fff; }
+
+.rodape {
+  border-top: 1px solid var(--cor-borda);
+  padding: 1rem 0; text-align: center; font-size: 0.9rem;
+}
+
+.botao {
+  background: var(--cor-primaria); color: #fff; border: 0; border-radius: 6px;
+  padding: 0.5rem 1rem; font-size: 1rem; cursor: pointer;
+}
+.botao:hover { background: var(--cor-primaria-escura); }
+
+.mensagem { border-radius: 6px; padding: 0.75rem 1rem; border: 1px solid; background: #fff; }
+.mensagem p { margin: 0 0 0.5rem; }
+.mensagem p:last-child { margin-bottom: 0; }
+.mensagem-sucesso { border-color: var(--cor-sucesso); color: var(--cor-sucesso); }
+.mensagem-erro { border-color: var(--cor-erro); color: var(--cor-erro); }
+
+.carregando { display: flex; align-items: center; gap: 0.6rem; }
+.spinner {
+  width: 1.2rem; height: 1.2rem; border-radius: 50%;
+  border: 3px solid var(--cor-borda); border-top-color: var(--cor-primaria);
+  animation: girar 0.8s linear infinite;
+}
+@keyframes girar { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .conteudo { padding-top: 1.25rem; }
+  h1 { font-size: 1.5rem; }
+}
