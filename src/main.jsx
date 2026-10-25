@@ -5,6 +5,7 @@ import App from './App.jsx';
 import AuthProvider from './contexts/AuthProvider.jsx';
 import './styles/global.css';
 import './styles/formularios.css';
+import './styles/catalogo.css';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

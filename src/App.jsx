@@ -3,6 +3,8 @@ import Layout from './components/Layout.jsx';
 import RotaProtegida from './components/RotaProtegida.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Livros from './pages/Livros.jsx';
+import LivroDetalhe from './pages/LivroDetalhe.jsx';
+import Estante from './pages/Estante.jsx';
 import Login from './pages/Login.jsx';
 import Cadastro from './pages/Cadastro.jsx';
 import EsqueciSenha from './pages/EsqueciSenha.jsx';
@@ -16,11 +18,13 @@ export default function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Inicio />} />
         <Route path="/livros" element={<Livros />} />
+        <Route path="/livros/:id" element={<LivroDetalhe />} />
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/esqueci-senha" element={<EsqueciSenha />} />
         <Route path="/redefinir-senha" element={<RedefinirSenha />} />
         <Route element={<RotaProtegida />}>
+          <Route path="/estante" element={<Estante />} />
           <Route path="/perfil" element={<Perfil />} />
         </Route>
         <Route path="*" element={<NaoEncontrada />} />
