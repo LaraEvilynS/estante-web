@@ -16,12 +16,23 @@ Consome a API [estante-api](https://github.com/LaraEvilynS/estante-api).
 
     src/
       assets/       imagens e ícones
-      components/   componentes reutilizáveis (Cabecalho, Rodape, Layout, RotaProtegida, CampoFormulario, Carregando, MensagemErro, StatusApi)
+      components/   componentes reutilizáveis (Cabecalho, Rodape, Layout, RotaProtegida, CartaoLivro, Capa, Nota, Paginacao, CampoFormulario, Carregando, MensagemErro, StatusApi)
       contexts/     estado global de autenticação (AuthProvider)
-      hooks/        hooks próprios (useAuth)
-      pages/        páginas (Inicio, Livros, Login, Cadastro, EsqueciSenha, RedefinirSenha, Perfil, NaoEncontrada)
-      services/     comunicação com a API (api.js, authService.js, saudeService.js, tokenStorage.js)
-      styles/       estilos (global.css, formularios.css)
+      hooks/        hooks próprios (useAuth, useCarregar)
+      pages/        páginas (Inicio, Livros, LivroDetalhe, Estante, Login, Cadastro, EsqueciSenha, RedefinirSenha, Perfil, NaoEncontrada)
+      services/     comunicação com a API (api.js, authService, livroService, avaliacaoService, estanteService, saudeService, tokenStorage)
+      styles/       estilos (global.css, formularios.css, catalogo.css)
+
+## Páginas e rotas
+
+| Caminho | Página | Acesso |
+|---|---|---|
+| `/` | Início (mostra o estado da API) | Público |
+| `/livros` | Catálogo com busca e paginação (`?busca=` e `?pagina=` na URL) | Público |
+| `/livros/:id` | Detalhe do livro, média de notas e avaliações | Público |
+| `/estante` | Minha estante, agrupada por status | **Somente autenticados** |
+| `/login`, `/cadastro`, `/esqueci-senha`, `/redefinir-senha` | Autenticação | Público |
+| `/perfil` | Minha conta | **Somente autenticados** |
 
 ## Como executar
 
@@ -39,13 +50,7 @@ Na página inicial, o componente "Conexão com a API" consulta a rota `/saude` e
 
 ## Autenticação
 
-| Página | Caminho | Acesso |
-|---|---|---|
-| Entrar | `/login` | Público |
-| Criar conta | `/cadastro` | Público |
-| Esqueci minha senha | `/esqueci-senha` | Público |
-| Redefinir senha (link do e-mail) | `/redefinir-senha?token=...` | Público |
-| Minha conta | `/perfil` | **Somente autenticados** (`RotaProtegida`) |
+As páginas de autenticação estão na tabela de rotas acima. As restritas usam o componente `RotaProtegida`.
 
 - O login recebe um token JWT da API, guardado no `localStorage`, e o `api.js` o envia em todas as requisições. A sessão sobrevive ao recarregar a página: ao abrir o site, o `AuthProvider` confirma o token em `GET /auth/eu`.
 - "Sair" apaga o token. Quem tenta abrir `/perfil` sem login é levado para `/login` e volta à página pedida depois de entrar.
@@ -57,6 +62,9 @@ Na página inicial, o componente "Conexão com a API" consulta a rota `/saude` e
 
 - Toda chamada HTTP passa pela instância única do Axios (`services/api.js`), que converte falhas em mensagens amigáveis.
 - O `Layout` com `Outlet` mantém cabeçalho e rodapé iguais em todas as páginas.
+- O hook `useCarregar` centraliza o carregamento de dados (loading, erro e botão "Tentar novamente") nas páginas.
+- No celular o menu fica recolhido atrás de um botão; as grades de livros passam de 1 coluna (celular) para várias (tablet e desktop).
+- Os livros precisam existir na API para aparecerem: o administrador os cadastra (veja o README da `estante-api`, collection do Postman).
 - O estado de login fica em um Context (`AuthProvider`), consumido pelo hook `useAuth`.
 - Estilos com variáveis CSS e layout responsivo (mobile, tablet e desktop).
 
@@ -65,3 +73,4 @@ Na página inicial, o componente "Conexão com a API" consulta a rota `/saude` e
 Semana 1: projeto base e estrutura de pastas.
 Semana 2: serviço Axios, componentes básicos, rotas e leitura da API (`/saude`).
 Semana 3: login, cadastro, recuperação de senha, sessão e rota protegida.
+Semana 4: navegação e layout responsivo, catálogo com busca e paginação, detalhe do livro com avaliações e minha estante (leitura dos dados reais da API).
