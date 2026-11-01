@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout.jsx';
 import RotaProtegida from './components/RotaProtegida.jsx';
+import RotaAdmin from './components/RotaAdmin.jsx';
 import Inicio from './pages/Inicio.jsx';
 import Livros from './pages/Livros.jsx';
 import LivroDetalhe from './pages/LivroDetalhe.jsx';
@@ -10,6 +11,8 @@ import Cadastro from './pages/Cadastro.jsx';
 import EsqueciSenha from './pages/EsqueciSenha.jsx';
 import RedefinirSenha from './pages/RedefinirSenha.jsx';
 import Perfil from './pages/Perfil.jsx';
+import AdminLivroForm from './pages/AdminLivroForm.jsx';
+import AdminUsuarios from './pages/AdminUsuarios.jsx';
 import NaoEncontrada from './pages/NaoEncontrada.jsx';
 
 export default function App() {
@@ -26,6 +29,11 @@ export default function App() {
         <Route element={<RotaProtegida />}>
           <Route path="/estante" element={<Estante />} />
           <Route path="/perfil" element={<Perfil />} />
+        </Route>
+        <Route element={<RotaAdmin />}>
+          <Route path="/admin/livros/novo" element={<AdminLivroForm />} />
+          <Route path="/admin/livros/:id/editar" element={<AdminLivroForm />} />
+          <Route path="/admin/usuarios" element={<AdminUsuarios />} />
         </Route>
         <Route path="*" element={<NaoEncontrada />} />
       </Route>

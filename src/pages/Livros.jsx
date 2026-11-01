@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { listarLivros } from '../services/livroService.js';
 import { useCarregar } from '../hooks/useCarregar.js';
+import { useAuth } from '../hooks/useAuth.js';
 import CartaoLivro from '../components/CartaoLivro.jsx';
 import Paginacao from '../components/Paginacao.jsx';
 import Carregando from '../components/Carregando.jsx';
@@ -9,6 +10,7 @@ import MensagemErro from '../components/MensagemErro.jsx';
 
 export default function Livros() {
   // A busca e a página ficam na URL (ex.: /livros?busca=dom&pagina=2), então dá para compartilhar o link.
+  const { usuario } = useAuth();
   const [parametros, setParametros] = useSearchParams();
   const busca = parametros.get('busca') || '';
   const pagina = Number(parametros.get('pagina')) || 1;
@@ -31,7 +33,14 @@ export default function Livros() {
 
   return (
     <section>
-      <h1>Livros</h1>
+      <div className="titulo-com-acao">
+        <h1>Livros</h1>
+        {usuario?.perfil === 'ADMIN' && (
+          <Link className="botao" to="/admin/livros/novo">
+            Cadastrar livro
+          </Link>
+        )}
+      </div>
       <form className="busca" onSubmit={aoBuscar} role="search">
         <input
           type="search"
