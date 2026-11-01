@@ -34,7 +34,7 @@ export default function AuthProvider({ children }) {
   }, []);
 
   const valor = useMemo(
-    () => ({ usuario, carregando, autenticado: Boolean(usuario), entrar, sair }),
+    () => ({ usuario, carregando, autenticado: Boolean(usuario), entrar, sair, atualizarUsuario: setUsuario }),
     [usuario, carregando, entrar, sair],
   );
 
