@@ -16,12 +16,13 @@ Consome a API [estante-api](https://github.com/LaraEvilynS/estante-api).
 
     src/
       assets/       imagens e ícones
-      components/   componentes reutilizáveis (Cabecalho, Rodape, Layout, RotaProtegida, CartaoLivro, Capa, Nota, Paginacao, CampoFormulario, Carregando, MensagemErro, StatusApi)
+      components/   componentes reutilizáveis (Cabecalho, Rodape, Layout, RotaProtegida, RotaAdmin, CartaoLivro, Capa, Nota, Paginacao, AcoesEstante, FormularioAvaliacao, ItemAvaliacao, BuscaOpenLibrary, CampoFormulario, CampoArea, Carregando, MensagemErro, StatusApi)
       contexts/     estado global de autenticação (AuthProvider)
-      hooks/        hooks próprios (useAuth, useCarregar)
-      pages/        páginas (Inicio, Livros, LivroDetalhe, Estante, Login, Cadastro, EsqueciSenha, RedefinirSenha, Perfil, NaoEncontrada)
-      services/     comunicação com a API (api.js, authService, livroService, avaliacaoService, estanteService, saudeService, tokenStorage)
-      styles/       estilos (global.css, formularios.css, catalogo.css)
+      hooks/        hooks próprios (useAuth, useCarregar, useAcao)
+      pages/        páginas (Inicio, Livros, LivroDetalhe, Estante, Login, Cadastro, EsqueciSenha, RedefinirSenha, Perfil, AdminLivroForm, AdminUsuarios, NaoEncontrada)
+      services/     comunicação com a API (api.js, authService, livroService, avaliacaoService, estanteService, usuarioService, saudeService, tokenStorage)
+      styles/       estilos (global.css, formularios.css, catalogo.css, acoes.css)
+      utils/        constantes e funções auxiliares (status.js)
 
 ## Páginas e rotas
 
@@ -29,10 +30,24 @@ Consome a API [estante-api](https://github.com/LaraEvilynS/estante-api).
 |---|---|---|
 | `/` | Início (mostra o estado da API) | Público |
 | `/livros` | Catálogo com busca e paginação (`?busca=` e `?pagina=` na URL) | Público |
-| `/livros/:id` | Detalhe do livro, média de notas e avaliações | Público |
-| `/estante` | Minha estante, agrupada por status | **Somente autenticados** |
+| `/livros/:id` | Detalhe do livro, avaliações e ações (estante e avaliar) | Público para ver; ações exigem login |
+| `/estante` | Minha estante: mudar status e remover | **Somente autenticados** |
+| `/perfil` | Minha conta: editar nome, alterar senha, excluir conta | **Somente autenticados** |
+| `/admin/livros/novo` | Cadastrar livro (com busca na Open Library) | **Somente administrador** |
+| `/admin/livros/:id/editar` | Editar livro | **Somente administrador** |
+| `/admin/usuarios` | Listar e excluir usuários | **Somente administrador** |
 | `/login`, `/cadastro`, `/esqueci-senha`, `/redefinir-senha` | Autenticação | Público |
-| `/perfil` | Minha conta | **Somente autenticados** |
+
+## CRUD pela interface
+
+| Entidade | Criar | Ler | Atualizar | Excluir |
+|---|---|---|---|---|
+| Usuário | `/cadastro` | `/perfil`, `/admin/usuarios` | `/perfil` (nome e senha) | `/perfil` (própria conta); `/admin/usuarios` (admin) |
+| Livro | `/admin/livros/novo` (admin) | `/livros`, `/livros/:id` | `/admin/livros/:id/editar` (admin) | `/livros/:id` (admin) |
+| Item da estante | `/livros/:id` ("Adicionar à estante") | `/estante` | `/estante` e `/livros/:id` (status) | `/estante` e `/livros/:id` |
+| Avaliação | `/livros/:id` (só para livro lido) | `/livros/:id` | `/livros/:id` (só o dono) | `/livros/:id` (dono ou admin) |
+
+Os botões só aparecem para quem pode usá-los, mas a API é quem garante as permissões: se uma regra for violada (ex.: avaliar um livro não lido), a mensagem da API é exibida.
 
 ## Como executar
 
@@ -62,9 +77,12 @@ As páginas de autenticação estão na tabela de rotas acima. As restritas usam
 
 - Toda chamada HTTP passa pela instância única do Axios (`services/api.js`), que converte falhas em mensagens amigáveis.
 - O `Layout` com `Outlet` mantém cabeçalho e rodapé iguais em todas as páginas.
-- O hook `useCarregar` centraliza o carregamento de dados (loading, erro e botão "Tentar novamente") nas páginas.
+- O hook `useCarregar` centraliza a leitura de dados (loading, erro e "Tentar novamente"); ao recarregar, mantém os dados na tela até chegarem os novos.
+- O hook `useAcao` centraliza as ações de escrita (criar, atualizar, excluir): controla o estado "processando" (botões desabilitados) e a mensagem de erro da API.
+- Exclusões pedem confirmação (`window.confirm`) antes de enviar.
+- A integração com a Open Library é feita pelo back-end; no formulário de cadastro de livro, a busca preenche os campos e o administrador revisa antes de salvar.
 - No celular o menu fica recolhido atrás de um botão; as grades de livros passam de 1 coluna (celular) para várias (tablet e desktop).
-- Os livros precisam existir na API para aparecerem: o administrador os cadastra (veja o README da `estante-api`, collection do Postman).
+- O administrador cadastra os livros pela própria interface (`/admin/livros/novo`). O usuário administrador inicial é criado pela API (veja o README da `estante-api`).
 - O estado de login fica em um Context (`AuthProvider`), consumido pelo hook `useAuth`.
 - Estilos com variáveis CSS e layout responsivo (mobile, tablet e desktop).
 
@@ -74,3 +92,4 @@ Semana 1: projeto base e estrutura de pastas.
 Semana 2: serviço Axios, componentes básicos, rotas e leitura da API (`/saude`).
 Semana 3: login, cadastro, recuperação de senha, sessão e rota protegida.
 Semana 4: navegação e layout responsivo, catálogo com busca e paginação, detalhe do livro com avaliações e minha estante (leitura dos dados reais da API).
+Semana 5: CRUD completo pela interface (estante, avaliações, livros, perfil e usuários), área do administrador e integração com a Open Library no cadastro de livros.
