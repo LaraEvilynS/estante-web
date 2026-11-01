@@ -39,6 +39,7 @@ export default function Cabecalho() {
           {autenticado ? (
             <>
               <NavLink to="/estante">Minha estante</NavLink>
+              {usuario.perfil === 'ADMIN' && <NavLink to="/admin/usuarios">Usuários</NavLink>}
               <NavLink to="/perfil">{usuario.nome.split(' ')[0]}</NavLink>
               <button className="botao-link" onClick={aoSair}>
                 Sair

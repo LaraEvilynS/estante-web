@@ -1,4 +1,6 @@
-export default function CampoFormulario({ rotulo, nome, tipo = 'text', valor, aoMudar, autoComplete, ajuda }) {
+export default function CampoFormulario({
+  rotulo, nome, tipo = 'text', valor, aoMudar, autoComplete, ajuda, obrigatorio = true, ...resto
+}) {
   return (
     <div className="campo">
       <label htmlFor={nome}>{rotulo}</label>
@@ -9,7 +11,8 @@ export default function CampoFormulario({ rotulo, nome, tipo = 'text', valor, ao
         value={valor}
         onChange={(e) => aoMudar(e.target.value)}
         autoComplete={autoComplete}
-        required
+        required={obrigatorio}
+        {...resto}
       />
       {ajuda && <small>{ajuda}</small>}
     </div>
