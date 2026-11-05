@@ -36,16 +36,15 @@ function FormularioNome() {
 }
 
 function FormularioSenha() {
+  const { sair } = useAuth();
+  const navegar = useNavigate();
   const { executar, processando, erro } = useAcao();
   const [senhaAtual, setSenhaAtual] = useState('');
   const [novaSenha, setNovaSenha] = useState('');
   const [confirmacao, setConfirmacao] = useState('');
   const [aviso, setAviso] = useState('');
-  const [salvo, setSalvo] = useState(false);
-
   async function aoEnviar(evento) {
     evento.preventDefault();
-    setSalvo(false);
     setAviso('');
     if (novaSenha !== confirmacao) {
       setAviso('As senhas não conferem.');
@@ -53,10 +52,9 @@ function FormularioSenha() {
     }
     const r = await executar(() => alterarSenha({ senhaAtual, novaSenha }));
     if (r.ok) {
-      setSalvo(true);
-      setSenhaAtual('');
-      setNovaSenha('');
-      setConfirmacao('');
+      // A troca encerra as sessões antigas, inclusive esta: é preciso entrar de novo.
+      sair();
+      navegar('/login', { replace: true, state: { mensagem: 'Senha alterada! Entre com a nova senha.' } });
     }
   }
 
@@ -68,7 +66,6 @@ function FormularioSenha() {
       <CampoFormulario rotulo="Confirmar nova senha" nome="confirmacao" tipo="password" valor={confirmacao} aoMudar={setConfirmacao} autoComplete="new-password" />
       {aviso && <MensagemErro mensagem={aviso} />}
       {erro && <MensagemErro mensagem={erro} />}
-      {salvo && <p className="mensagem mensagem-sucesso">Senha alterada com sucesso.</p>}
       <button className="botao" type="submit" disabled={processando}>
         {processando ? 'Salvando...' : 'Alterar senha'}
       </button>
