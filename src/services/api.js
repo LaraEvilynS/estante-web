@@ -1,6 +1,12 @@
 import axios from 'axios';
 import { lerToken } from './tokenStorage.js';
 
+// O AuthProvider registra aqui o que fazer quando a API diz que a sessão não vale mais.
+let aoExpirarSessao = null;
+export function registrarAoExpirarSessao(funcao) {
+  aoExpirarSessao = funcao;
+}
+
 // Instância única do Axios: toda comunicação com a API passa por aqui.
 const api = axios.create({
   baseURL: import.meta.env.VITE_URL_API || 'http://localhost:3000',
@@ -27,6 +33,11 @@ api.interceptors.response.use(
       mensagem = erro.response.data.detalhes.map((d) => d.mensagem).join(' ');
     } else if (erro.response.data?.erro) {
       mensagem = erro.response.data.erro;
+    }
+    // 401 com um token salvo = sessão expirada, token inválido, conta excluída ou senha trocada.
+    // (O 401 do próprio login significa "senha errada" e não conta.)
+    if (erro.response?.status === 401 && lerToken() && !erro.config?.url?.includes('/auth/login')) {
+      aoExpirarSessao?.();
     }
     const erroAmigavel = new Error(mensagem);
     erroAmigavel.status = erro.response?.status;

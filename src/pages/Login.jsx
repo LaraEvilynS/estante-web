@@ -5,7 +5,7 @@ import CampoFormulario from '../components/CampoFormulario.jsx';
 import MensagemErro from '../components/MensagemErro.jsx';
 
 export default function Login() {
-  const { entrar, autenticado } = useAuth();
+  const { entrar, autenticado, sessaoExpirada } = useAuth();
   const navegar = useNavigate();
   const local = useLocation();
   const [email, setEmail] = useState('');
@@ -31,6 +31,7 @@ export default function Login() {
   return (
     <section className="cartao-formulario">
       <h1>Entrar</h1>
+      {sessaoExpirada && <p className="mensagem mensagem-erro">Sua sessão expirou. Entre novamente.</p>}
       {local.state?.mensagem && <p className="mensagem mensagem-sucesso">{local.state.mensagem}</p>}
       <form onSubmit={aoEnviar} className="formulario">
         <CampoFormulario rotulo="E-mail" nome="email" tipo="email" valor={email} aoMudar={setEmail} autoComplete="email" />
