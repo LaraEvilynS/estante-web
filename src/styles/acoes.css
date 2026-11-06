@@ -1,0 +1,57 @@
+/* ----- Painéis, ações e formulários do CRUD ----- */
+.painel {
+  background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px;
+  padding: 1rem; margin: 1rem 0;
+}
+.painel h2, .painel h3 { margin-top: 0; }
+.painel-perigo { border-color: var(--cor-erro); }
+.dica { color: #666; }
+
+.linha-acoes { display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap; margin-top: 0.75rem; }
+.painel > .linha-acoes:first-of-type { margin-top: 0; }
+
+select, .campo textarea {
+  padding: 0.5rem 0.6rem; border: 1px solid var(--cor-borda); border-radius: 6px;
+  font-size: 1rem; font-family: inherit; background: #fff;
+}
+.campo textarea { resize: vertical; width: 100%; }
+.campo textarea:focus, select:focus { outline: 2px solid var(--cor-primaria); border-color: var(--cor-primaria); }
+
+a.botao { display: inline-block; text-decoration: none; }
+.botao-secundario { background: #fff; color: var(--cor-primaria); border: 1px solid var(--cor-primaria); }
+.botao-secundario:hover { background: #f3ece3; }
+.botao-perigo { background: var(--cor-erro); }
+.botao-perigo:hover { background: #8c1f19; }
+.botao:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.titulo-com-acao { display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+
+.formulario-avaliacao { max-width: 520px; }
+
+/* ----- Estante ----- */
+.item-estante-completo { display: flex; flex-direction: column; gap: 0.25rem; }
+.item-estante-completo .linha-acoes { margin-top: 0.25rem; }
+
+/* ----- Open Library ----- */
+.resultados-externos { list-style: none; padding: 0; margin: 1rem 0 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.resultado-externo {
+  display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem;
+  border: 1px solid var(--cor-borda); border-radius: 8px;
+}
+.resultado-externo > div { flex: 1; min-width: 0; }
+.resultado-externo p { margin: 0.2rem 0 0; color: #555; }
+
+/* ----- Usuários (admin) ----- */
+.lista-usuarios { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.usuario-linha {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem 1rem;
+}
+.usuario-linha p { margin: 0.2rem 0; color: #555; }
+.usuario-linha small { color: #888; }
+
+@media (max-width: 640px) {
+  .resultado-externo { flex-wrap: wrap; }
+  .resultado-externo .botao { width: 100%; }
+  .linha-acoes .botao, .linha-acoes select { flex: 1 1 auto; }
+}

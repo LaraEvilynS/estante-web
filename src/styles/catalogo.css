@@ -1,0 +1,69 @@
+/* ----- Menu responsivo ----- */
+.menu-botao {
+  display: none;
+  background: none; border: 1px solid #fff; color: #fff;
+  border-radius: 6px; font-size: 1.3rem; padding: 0.15rem 0.6rem; cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .menu-botao { display: block; }
+  .menu { display: none; width: 100%; flex-direction: column; gap: 0.5rem; padding: 0.5rem 0 0.25rem; }
+  .menu.menu-aberto { display: flex; }
+}
+
+/* ----- Busca e paginação ----- */
+.busca { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+.busca input {
+  flex: 1; min-width: 0; padding: 0.6rem 0.75rem;
+  border: 1px solid var(--cor-borda); border-radius: 6px; font-size: 1rem;
+}
+.contagem { color: #666; margin: 0 0 0.75rem; }
+.estado-vazio { color: #666; }
+.paginacao { display: flex; align-items: center; justify-content: center; gap: 1rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+/* ----- Grade de livros (1 coluna no celular, mais no tablet e no desktop) ----- */
+.grade-livros { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; }
+.cartao-livro {
+  display: flex; gap: 0.9rem; padding: 0.9rem; background: #fff;
+  border: 1px solid var(--cor-borda); border-radius: 8px; color: inherit; text-decoration: none;
+}
+.cartao-livro:hover { border-color: var(--cor-primaria); }
+.cartao-livro-info h3 { margin: 0 0 0.25rem; font-size: 1.05rem; }
+.cartao-livro-info p { margin: 0 0 0.4rem; color: #555; }
+
+/* ----- Capas ----- */
+.capa { object-fit: cover; border-radius: 4px; background: #e7dfd1; flex-shrink: 0; }
+.capa-media { width: 72px; height: 104px; }
+.capa-pequena { width: 48px; height: 70px; }
+.capa-grande { width: 180px; height: 260px; }
+.capa-vazia { display: flex; align-items: center; justify-content: center; font-size: 1.6rem; font-weight: 700; color: var(--cor-primaria); }
+
+.nota { color: var(--cor-primaria); font-weight: 600; }
+.nota-vazia { color: #888; font-weight: 400; font-size: 0.9rem; }
+
+/* ----- Detalhe do livro ----- */
+.detalhe-livro { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+.detalhe-livro h1 { margin: 0 0 0.25rem; }
+.autor { margin: 0 0 0.5rem; color: #555; font-size: 1.1rem; }
+.ficha { list-style: none; padding: 0; margin: 0.75rem 0; color: #555; }
+.lista-avaliacoes { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+.avaliacao { background: #fff; border: 1px solid var(--cor-borda); border-radius: 8px; padding: 0.75rem 1rem; }
+.avaliacao p { margin: 0.4rem 0 0; }
+.avaliacao-topo { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.avaliacao-topo small { color: #888; margin-left: auto; }
+
+/* ----- Estante ----- */
+.secao-estante { margin-bottom: 1.5rem; }
+.secao-estante h2 small { color: #888; font-weight: 400; }
+.lista-estante { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.75rem; }
+.item-estante {
+  display: flex; gap: 0.75rem; align-items: center; padding: 0.6rem; background: #fff;
+  border: 1px solid var(--cor-borda); border-radius: 8px; color: inherit; text-decoration: none;
+}
+.item-estante:hover { border-color: var(--cor-primaria); }
+.item-estante p { margin: 0.2rem 0 0; color: #555; }
+
+@media (max-width: 640px) {
+  .detalhe-livro { flex-direction: column; align-items: center; text-align: center; }
+  .grade-livros, .lista-estante { grid-template-columns: 1fr; }
+}
