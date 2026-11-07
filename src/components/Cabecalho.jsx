@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
+import { useAviso } from '../hooks/useAviso.js';
 
 export default function Cabecalho() {
   const { autenticado, usuario, sair } = useAuth();
+  const { mostrarSucesso } = useAviso();
   const navegar = useNavigate();
   const [aberto, setAberto] = useState(false);
 
   function aoSair() {
     sair();
+    mostrarSucesso('Você saiu da conta.');
     navegar('/');
   }
 

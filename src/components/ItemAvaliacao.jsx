@@ -17,7 +17,7 @@ export default function ItemAvaliacao({ avaliacao, livroId, aoAlterar }) {
   async function excluir() {
     const pergunta = ehDono ? 'Excluir a sua avaliação?' : `Excluir a avaliação de ${avaliacao.usuario.nome}?`;
     if (!window.confirm(pergunta)) return;
-    const r = await executar(() => excluirAvaliacao(avaliacao.id));
+    const r = await executar(() => excluirAvaliacao(avaliacao.id), 'Avaliação excluída.');
     if (r.ok) aoAlterar();
   }
 

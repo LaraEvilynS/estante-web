@@ -17,11 +17,11 @@ Consome a API [estante-api](https://github.com/LaraEvilynS/estante-api).
     src/
       assets/       imagens e ícones
       components/   componentes reutilizáveis (Cabecalho, Rodape, Layout, RotaProtegida, RotaAdmin, CartaoLivro, Capa, Nota, Paginacao, AcoesEstante, FormularioAvaliacao, ItemAvaliacao, BuscaOpenLibrary, CampoFormulario, CampoArea, Carregando, MensagemErro, StatusApi)
-      contexts/     estado global de autenticação (AuthProvider)
-      hooks/        hooks próprios (useAuth, useCarregar, useAcao)
+      contexts/     estado global: login (AuthProvider) e avisos de sucesso (AvisoProvider)
+      hooks/        hooks próprios (useAuth, useCarregar, useAcao, useAviso)
       pages/        páginas (Inicio, Livros, LivroDetalhe, Estante, Login, Cadastro, EsqueciSenha, RedefinirSenha, Perfil, AdminLivroForm, AdminUsuarios, NaoEncontrada)
       services/     comunicação com a API (api.js, authService, livroService, avaliacaoService, estanteService, usuarioService, saudeService, tokenStorage)
-      styles/       estilos (global.css, formularios.css, catalogo.css, acoes.css)
+      styles/       estilos (global.css, formularios.css, catalogo.css, acoes.css, avisos.css)
       utils/        constantes e funções auxiliares (status.js)
 
 ## Páginas e rotas
@@ -72,7 +72,7 @@ Na página inicial, o componente "Conexão com a API" consulta a rota `/saude` e
 
 ## Roteiro para testar todas as telas
 
-Com a API e o site rodando:
+Com a API e o site rodando (cada ação que altera dados mostra um aviso verde de sucesso no canto da tela):
 
 1. **Administrador:** em **Entrar**, use `admin@estante.local` e a `ADMIN_SENHA` definida no `.env` da API. O menu passa a mostrar **Minha estante** e **Usuários**.
 2. **Cadastrar livro:** **Livros > Cadastrar livro**. Digite um título em **Buscar na Open Library**, clique em **Usar este livro** e depois em **Cadastrar livro** (ou preencha à mão). Na página do livro, teste **Editar livro**.
@@ -92,7 +92,7 @@ As páginas de autenticação estão na tabela de rotas acima. As restritas usam
 - O login recebe um token JWT da API, guardado no `localStorage`, e o `api.js` o envia em todas as requisições. A sessão sobrevive ao recarregar a página: ao abrir o site, o `AuthProvider` confirma o token em `GET /auth/eu`.
 - "Sair" apaga o token. Quem tenta abrir `/perfil` sem login é levado para `/login` e volta à página pedida depois de entrar.
 - Se a API recusar o token (sessão expirada, conta excluída ou senha trocada), o `api.js` avisa o `AuthProvider`, que encerra a sessão: a pessoa é levada ao login, com a mensagem "Sua sessão expirou". Depois de **alterar a senha**, a sessão atual também é encerrada e é preciso entrar com a nova senha.
-- Formulários mostram loading no botão e mensagens de erro vindas da API (ex.: senha curta, credenciais inválidas).
+- Formulários mostram loading no botão e mensagens de erro vindas da API (ex.: senha curta, credenciais inválidas). As ações que alteram dados mostram um aviso verde de sucesso no canto da tela (ex.: "Avaliação publicada.").
 - Para testar a recuperação de senha: peça o link em `/esqueci-senha`, abra o Mailpit em http://localhost:8025 e clique no link do e-mail.
 - Limitação: o token no `localStorage` fica exposto a scripts da página (XSS). Aceitável para este projeto; uma alternativa mais segura seria cookie `HttpOnly`.
 
@@ -101,7 +101,8 @@ As páginas de autenticação estão na tabela de rotas acima. As restritas usam
 - Toda chamada HTTP passa pela instância única do Axios (`services/api.js`), que converte falhas em mensagens amigáveis.
 - O `Layout` com `Outlet` mantém cabeçalho e rodapé iguais em todas as páginas.
 - O hook `useCarregar` centraliza a leitura de dados (loading, erro e "Tentar novamente"); ao recarregar, mantém os dados na tela até chegarem os novos.
-- O hook `useAcao` centraliza as ações de escrita (criar, atualizar, excluir): controla o estado "processando" (botões desabilitados) e a mensagem de erro da API.
+- O hook `useAcao` centraliza as ações de escrita (criar, atualizar, excluir): controla o estado "processando" (botões desabilitados), a mensagem de erro da API e, quando recebe uma mensagem de sucesso, dispara o aviso.
+- Os avisos de sucesso ficam em um Context (`AvisoProvider`), acima das rotas: continuam na tela mesmo quando a ação leva a outra página (ex.: depois de cadastrar um livro). Somem sozinhos em 4 segundos ou no botão ×.
 - Exclusões pedem confirmação (`window.confirm`) antes de enviar.
 - A integração com a Open Library é feita pelo back-end; no formulário de cadastro de livro, a busca preenche os campos e o administrador revisa antes de salvar.
 - No celular o menu fica recolhido atrás de um botão; as grades de livros passam de 1 coluna (celular) para várias (tablet e desktop).

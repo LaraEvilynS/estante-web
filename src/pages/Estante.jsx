@@ -19,13 +19,13 @@ export default function Estante() {
   const { executar, processando, erro: erroAcao, limparErro } = useAcao();
 
   async function mudar(item, status) {
-    const r = await executar(() => atualizarStatus(item.id, status));
+    const r = await executar(() => atualizarStatus(item.id, status), 'Status atualizado.');
     if (r.ok) recarregar();
   }
 
   async function remover(item) {
     if (!window.confirm(`Remover "${item.livro.titulo}" da sua estante?`)) return;
-    const r = await executar(() => removerDaEstante(item.id));
+    const r = await executar(() => removerDaEstante(item.id), 'Livro removido da estante.');
     if (r.ok) recarregar();
   }
 
