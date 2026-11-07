@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
 import { useAcao } from '../hooks/useAcao.js';
+import { useAviso } from '../hooks/useAviso.js';
 import { alterarSenha, atualizarPerfil, excluirConta } from '../services/usuarioService.js';
 import CampoFormulario from '../components/CampoFormulario.jsx';
 import MensagemErro from '../components/MensagemErro.jsx';
@@ -10,16 +11,11 @@ function FormularioNome() {
   const { usuario, atualizarUsuario } = useAuth();
   const { executar, processando, erro } = useAcao();
   const [nome, setNome] = useState(usuario.nome);
-  const [salvo, setSalvo] = useState(false);
 
   async function aoEnviar(evento) {
     evento.preventDefault();
-    setSalvo(false);
-    const r = await executar(() => atualizarPerfil({ nome: nome.trim() }));
-    if (r.ok) {
-      atualizarUsuario(r.resultado);
-      setSalvo(true);
-    }
+    const r = await executar(() => atualizarPerfil({ nome: nome.trim() }), 'Nome atualizado.');
+    if (r.ok) atualizarUsuario(r.resultado);
   }
 
   return (
@@ -27,7 +23,6 @@ function FormularioNome() {
       <h2>Editar nome</h2>
       <CampoFormulario rotulo="Nome" nome="nome" valor={nome} aoMudar={setNome} autoComplete="name" />
       {erro && <MensagemErro mensagem={erro} />}
-      {salvo && <p className="mensagem mensagem-sucesso">Nome atualizado.</p>}
       <button className="botao" type="submit" disabled={processando}>
         {processando ? 'Salvando...' : 'Salvar nome'}
       </button>
@@ -82,7 +77,7 @@ function ExcluirConta() {
   async function aoEnviar(evento) {
     evento.preventDefault();
     if (!window.confirm('Excluir a sua conta definitivamente? Suas avaliações e sua estante serão apagadas.')) return;
-    const r = await executar(() => excluirConta(senha));
+    const r = await executar(() => excluirConta(senha), 'Conta excluída.');
     if (r.ok) {
       sair();
       navegar('/');
@@ -105,10 +100,12 @@ function ExcluirConta() {
 // Página restrita: só aparece para quem está autenticado (ver RotaProtegida).
 export default function Perfil() {
   const { usuario, sair } = useAuth();
+  const { mostrarSucesso } = useAviso();
   const navegar = useNavigate();
 
   function aoSair() {
     sair();
+    mostrarSucesso('Você saiu da conta.');
     navegar('/');
   }
 

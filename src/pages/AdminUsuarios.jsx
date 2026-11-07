@@ -11,7 +11,7 @@ export default function AdminUsuarios() {
 
   async function excluir(usuario) {
     if (!window.confirm(`Excluir o usuário ${usuario.nome}? As avaliações e a estante dele também serão apagadas.`)) return;
-    const r = await executar(() => excluirUsuario(usuario.id));
+    const r = await executar(() => excluirUsuario(usuario.id), 'Usuário excluído.');
     if (r.ok) recarregar();
   }
 

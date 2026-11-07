@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth.js';
+import { useAviso } from '../hooks/useAviso.js';
 import { cadastrar } from '../services/authService.js';
 import CampoFormulario from '../components/CampoFormulario.jsx';
 import MensagemErro from '../components/MensagemErro.jsx';
 
 export default function Cadastro() {
   const { entrar, autenticado } = useAuth();
+  const { mostrarSucesso } = useAviso();
   const navegar = useNavigate();
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -28,6 +30,7 @@ export default function Cadastro() {
     try {
       await cadastrar({ nome: nome.trim(), email: email.trim(), senha });
       await entrar(email.trim(), senha);
+      mostrarSucesso('Conta criada com sucesso.');
       navegar('/perfil', { replace: true });
     } catch (e) {
       setErro(e.message);

@@ -13,7 +13,10 @@ export default function FormularioAvaliacao({ livroId, avaliacao, aoSalvar, aoCa
   async function aoEnviar(evento) {
     evento.preventDefault();
     const dados = { nota: Number(nota), comentario: comentario.trim() || null };
-    const r = await executar(() => (avaliacao ? atualizarAvaliacao(avaliacao.id, dados) : criarAvaliacao(livroId, dados)));
+    const r = await executar(
+      () => (avaliacao ? atualizarAvaliacao(avaliacao.id, dados) : criarAvaliacao(livroId, dados)),
+      avaliacao ? 'Avaliação atualizada.' : 'Avaliação publicada.',
+    );
     if (r.ok) aoSalvar();
   }
 
