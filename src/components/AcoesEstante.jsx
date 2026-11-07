@@ -10,18 +10,18 @@ export default function AcoesEstante({ livroId, item, aoAlterar }) {
   const [statusNovo, setStatusNovo] = useState('QUERO_LER');
 
   async function adicionar() {
-    const r = await executar(() => adicionarNaEstante({ livroId, status: statusNovo }));
+    const r = await executar(() => adicionarNaEstante({ livroId, status: statusNovo }), 'Livro adicionado à estante.');
     if (r.ok) aoAlterar();
   }
 
   async function mudar(status) {
-    const r = await executar(() => atualizarStatus(item.id, status));
+    const r = await executar(() => atualizarStatus(item.id, status), 'Status atualizado.');
     if (r.ok) aoAlterar();
   }
 
   async function remover() {
     if (!window.confirm('Remover este livro da sua estante?')) return;
-    const r = await executar(() => removerDaEstante(item.id));
+    const r = await executar(() => removerDaEstante(item.id), 'Livro removido da estante.');
     if (r.ok) aoAlterar();
   }
 

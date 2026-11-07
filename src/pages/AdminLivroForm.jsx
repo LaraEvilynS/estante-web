@@ -45,7 +45,10 @@ function FormularioLivro({ inicial, id }) {
       genero: opcional(campos.genero),
       sinopse: opcional(campos.sinopse),
     };
-    const r = await executar(() => (editando ? atualizarLivro(id, dados) : criarLivro(dados)));
+    const r = await executar(
+      () => (editando ? atualizarLivro(id, dados) : criarLivro(dados)),
+      editando ? 'Livro atualizado.' : 'Livro cadastrado.',
+    );
     if (r.ok) navegar(`/livros/${r.resultado.id}`);
   }
 

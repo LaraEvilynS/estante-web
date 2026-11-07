@@ -36,7 +36,7 @@ export default function LivroDetalhe() {
 
   async function excluir() {
     if (!window.confirm('Excluir este livro? As avaliações e os itens de estante dele também serão apagados.')) return;
-    const r = await executar(() => excluirLivro(id));
+    const r = await executar(() => excluirLivro(id), 'Livro excluído.');
     if (r.ok) navegar('/livros');
   }
 
